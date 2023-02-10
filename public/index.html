@@ -25,16 +25,17 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item modal-preauth">
-            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal-signin-form">Sign In</button>
+            <button id="menu-signin" class="btn btn-outline-danger" data-bs-toggle="modal"
+              data-bs-target="#modal-signin-form">Sign In</button>
           </li>
           <li class="nav-item modal-postauth">
-            <button class="btn btn-outline-primary">TicTacToe</button>
+            <button id="menu-tictactoe" class="btn btn-outline-primary">TicTacToe</button>
           </li>
           <li class="nav-item modal-postauth">
-            <button class="btn btn-outline-secondary">About</button>
+            <button id="menu-about" class="btn btn-outline-secondary">About</button>
           </li>
           <li class="nav-item modal-postauth">
-            <button class="btn btn-outline-danger">Sign Out</button>
+            <button id="menu-signout" class="btn btn-outline-danger">Sign Out</button>
           </li>
         </ul>
       </div>
@@ -66,6 +67,26 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal: Popup Info Box-->
+  <div class="modal fade" id="modal-infobox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-infobox-title" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-infobox-title"></h5>
+        </div>
+        <div class="modal-body" id="modal-infobox-body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="root" class="bg-light m-3 p-4"></div>
 
   <script type="module">
     // Import the functions you need from the SDKs you need
