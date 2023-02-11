@@ -2,7 +2,7 @@
     <div class="col">
         <h1>Tic Tac Toe Game</h1>
         Turn: <img id="turn" src="/images/X.png" height="40" width="40">
-                (Moves = <span id="moves">0</span>)
+        (Moves = <span id="moves">0</span>)
         <br>
         <table>
             <tr>
@@ -56,9 +56,29 @@
                     </button>
                 </td>
             </tr>
+
         </table>
+        <div class="row">
+            <div class="col">
+                <button id="button-new-game" class="btn btn-outline-primary">New Game</button>
+            </div>
+        </div>
     </div> <!--left pane: game board-->
     <div class="col">
         <h1>Status</h1>
+        <div class="row">
+            <div class="col">
+                <button id="button-history" class="btn btn-outline-primary">Gameplay History</button>
+            </div>
+            <div class="col">
+                <button id="button-clear" class="btn btn-outline-danger">Clear Status</button>
+            </div>
+        </div>
+        <br>
+        <div class="container bg-secondary text-white">
+            <div id="status-message">
+
+            </div>
+        </div>
     </div> <!--right pane: status-->
 </div>

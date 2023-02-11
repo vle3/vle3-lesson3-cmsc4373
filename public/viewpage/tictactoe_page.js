@@ -2,8 +2,10 @@ import * as Elements from './elements.js';
 import { routePath } from '../controller/route.js';
 import { currentUser } from '../controller/firebase_auth.js';
 import { unauthorizedAccess } from './unauthorized_access_message.js';
-import { TicTacToeGame, marking,  } from '../model/tictactoe_game.js';
+import { TicTacToeGame, marking, } from '../model/tictactoe_game.js';
 import { info } from './util.js';
+import { addTicTacToeGameHistory, getTicTacToeGameHistory } from '../controller/firestore_controller.js';
+import { DEV } from '../model/constants.js';
 
 export function addEventListeners() {
     Elements.menus.tictactoe.addEventListener('click', () => {
@@ -20,6 +22,10 @@ let screen = {
     moves: null,
     buttons: null,
     images: null,
+    newGameButton: null,
+    historyButton: null,
+    clearButton: null,
+    statusMessage: null,
 };
 
 const imageSource = {
@@ -55,15 +61,30 @@ function getScreenElements() {
         screen.buttons.push(document.getElementById(`button-${i}`));
         screen.images.push(document.getElementById(`image-${i}`));
     }
+    screen.newGameButton = document.getElementById('button-new-game');
+    screen.historyButton = document.getElementById('button-history');
+    screen.clearButton = document.getElementById('button-clear');
+    screen.statusMessage = document.getElementById('status-message');
 }
 
 function addGameEvents() {
-    for (let i = 0; i < 9; i++){
+    for (let i = 0; i < 9; i++) {
         screen.buttons[i].addEventListener('click', buttonPressListener);
     }
+
+    screen.newGameButton.addEventListener('click', () => {
+        gameModel = new TicTacToeGame();
+        updateScreen();
+    });
+
+    screen.historyButton.addEventListener('click', historyButtonEvent);
+    screen.clearButton.addEventListener('click', () => {
+        gameModel.status = ' ';
+        updateScreen();
+    });
 }
 
-function buttonPressListener(){
+async function buttonPressListener() {
     const buttonId = event.target.id;
     const pos = buttonId[buttonId.length - 1];
 
@@ -72,19 +93,33 @@ function buttonPressListener(){
     gameModel.moves++;
 
     gameModel.setWinner();
-    if(gameModel.winner != null){
-        if(gameModel.winner == marking.U){
-            gameModel.status =  'Game Over: DRAW';
-        }else {
+    if (gameModel.winner != null) {
+        if (gameModel.winner == marking.U) {
+            gameModel.status = 'Game Over: DRAW';
+        } else {
             gameModel.status = `
                 Game Over - Winner: ${marking[gameModel.winner]} with ${gameModel.moves}
             `;
         }
         updateScreen();
-        info('Game Over' , gameModel.status);
+
+        const gameplay = {
+            email: currentUser.email,
+            winner: gameModel.winner,
+            moves: gameModel.moves,
+            timestamp: Date.now(),
+        }
+        try {
+            await addTicTacToeGameHistory(gameplay);
+            info('Game Over', gameModel.status);
+        } catch (e) {
+            info('Game Over', `Failed to save the gameplay history: ${e}`);
+            if (DEV) console.log('Game over: failed to save: ', e);
+        }
+    } else {
+        updateScreen();
     }
 
-    updateScreen();
 }
 
 function updateScreen() {
@@ -94,6 +129,54 @@ function updateScreen() {
 
     for (let i = 0; i < 9; i++) {
         screen.images[i].src = imageSource[gameModel.board[i]];
-        screen.buttons[i].disabled = gameModel.board[i] != marking.U;
+        screen.buttons[i].disabled = gameModel.board[i] != marking.U || gameModel.winner != null;
+    }
+
+    screen.newGameButton.disabled = gameModel.winner == null;
+
+    screen.statusMessage.innerHTML = gameModel.status;
+}
+
+async function historyButtonEvent() {
+    let history;
+    try {
+        history = await getTicTacToeGameHistory(currentUser.email);
+        console.log('History', history);
+        let html = `
+            <table class="table table-success table-striped">
+                <tr>
+                    <th>
+                        Winner
+                    </th>
+                    <th>
+                        Moves
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                </tr>
+                <body>
+        `;
+        for (let i = 0; i < history.length; i++) {
+            html += `
+                <tr>
+                    <td>
+                        ${history[i].winner == marking.U ? 'Draw' : history[i].winner}
+                    </td>
+                    <td>
+                        ${history[i].moves}
+                    </td>
+                    <td>
+                        ${new Date(history[i].timestamp).toLocaleString()}
+                    </td>
+                </tr>
+            `;
+        }
+        html += '</body></table>';
+        gameModel.status = html;
+        updateScreen();
+    } catch (e) {
+        if (DEV) console.log('ERROR; history button', e);
+        info('Failed to get game history', JSON.stringify(e));
     }
 }
