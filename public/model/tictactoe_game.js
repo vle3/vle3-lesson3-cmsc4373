@@ -20,6 +20,26 @@ export class TicTacToeGame {
         this.turn = this.turn == marking.X ? marking.O : marking.X;
     }
 
+    setWinner() {
+        for (let i of [0, 1, 2]) {
+            this.winner = this.checkCol(i);
+            if (this.winner != null) return;
+            this.winner = this.checkRow(i);
+            if (this.winner != null) return;
+        }
+        this.winner = this.checkDiag1();
+        if (this.winner != null) return;
+        this.winner = this.checkDiag2();
+        if (this.winner != null) return;
+
+        if (this.moves == 9) {
+            this.winner = marking.U; // draw / tie
+            return;
+        }
+
+        this.winner = null; // game in progress
+    }
+
     checkRow(n) {
         if (this.board[n * 3] != marking.U
             && this.board[n * 3] == this.board[n * 3 + 1]
@@ -53,7 +73,7 @@ export class TicTacToeGame {
         }
     }
 
-    checkDiag2(){
+    checkDiag2() {
         if (this.board[0] != marking.U
             && this.board[0] == this.board[4]
             && this.board[0] == this.board[8]

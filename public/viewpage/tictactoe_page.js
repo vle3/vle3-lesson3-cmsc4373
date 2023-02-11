@@ -3,6 +3,7 @@ import { routePath } from '../controller/route.js';
 import { currentUser } from '../controller/firebase_auth.js';
 import { unauthorizedAccess } from './unauthorized_access_message.js';
 import { TicTacToeGame, marking,  } from '../model/tictactoe_game.js';
+import { info } from './util.js';
 
 export function addEventListeners() {
     Elements.menus.tictactoe.addEventListener('click', () => {
@@ -69,6 +70,19 @@ function buttonPressListener(){
     gameModel.board[pos] = gameModel.turn;
     gameModel.toggleTurn();
     gameModel.moves++;
+
+    gameModel.setWinner();
+    if(gameModel.winner != null){
+        if(gameModel.winner == marking.U){
+            gameModel.status =  'Game Over: DRAW';
+        }else {
+            gameModel.status = `
+                Game Over - Winner: ${marking[gameModel.winner]} with ${gameModel.moves}
+            `;
+        }
+        updateScreen();
+        info('Game Over' , gameModel.status);
+    }
 
     updateScreen();
 }
