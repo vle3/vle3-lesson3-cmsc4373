@@ -1,8 +1,78 @@
 <div class="row">
     <div class="col">
         <h1>Baseball Game</h1>
+        <h5>
+            <span class="badge bg-secondary">Game Key: </span>
+            <span class="badge bg-danger" id="game-keys"></span>
+
+            <br>
+            <span class="badge bg-secondary">Guess: </span>
+            <span class="badge bg-primary" id="guesses"> </span>
+        </h5>
+        <br>
+        <br>
+        <table>
+            <tr>
+                <td>
+                    <button id="button-1" type="button" class="btn btn-secondary btn-lg ">1</button>
+                </td>
+                <td>
+                    <button id="button-2" type="button" class="btn btn-secondary btn-lg">2</button>
+                </td>
+                <td>
+                    <button id="button-3" type="button" class="btn btn-secondary btn-lg">3</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="button-4" type="button" class="btn btn-secondary btn-lg ">4</button>
+                </td>
+                <td>
+                    <button id="button-5" type="button" class="btn btn-secondary btn-lg">5</button>
+                </td>
+                <td>
+                    <button id="button-6" type="button" class="btn btn-secondary btn-lg">6</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="button-7" type="button" class="btn btn-secondary btn-lg ">7</button>
+                </td>
+                <td>
+                    <button id="button-8" type="button" class="btn btn-secondary btn-lg">8</button>
+                </td>
+                <td>
+                    <button id="button-9" type="button" class="btn btn-secondary btn-lg">9</button>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button id="button-0" type="button" class="btn btn-secondary btn-lg">0</button></td>
+                <td></td>
+            </tr>
+        </table>
+        <br>
+        <div class="row">
+            <div class="col">
+                <button id="button-new-game" class="btn btn-outline-primary">New Game</button>
+            </div>
+        </div>
     </div>
     <div class="col">
         <h1>Status </h1>
+        <div class="row">
+            <div class="col">
+                <button id="button-history" class="btn btn-outline-primary">Gameplay History</button>
+            </div>
+        </div>
+        <br>
+        <div class="container bg-info text-white">
+            <div id="gameplay-history">
+
+            </div>
+            <div id="status-message">
+
+            </div>
+        </div>
     </div>
 </div>

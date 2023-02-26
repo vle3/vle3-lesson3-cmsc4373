@@ -8,6 +8,7 @@ import {
 const db = getFirestore();
 
 const TicTacToeGameCollection = 'tictactoe_game';
+const BaseballGameCollection = 'baseball_game';
 
 export async function addTicTacToeGameHistory(gameplay) {
     //gameplay = {email, winner, moves, timestamp}
@@ -25,6 +26,26 @@ export async function getTicTacToeGameHistory(email) {
     snapShot.forEach(doc => {
         const {email, winner, moves, timestamp} = doc.data();
         history.push({email, winner, moves, timestamp});
+    });
+    return history;
+}
+
+export async function addBaseballGameHistory(gameplay){
+    //gameplay = {emails, attemps, timestamp}
+    await addDoc(collection(db, BaseballGameCollection), gameplay);
+}
+
+export async function getBaseballGameHistory(email){
+    let history = [];
+    const q = query(
+        collection(db, BaseballGameCollection),
+        where('email', '==', email),
+        orderBy('timestamp','desc'),
+    );
+    const snapShot = await getDocs(q);
+    snapShot.forEach(doc => {
+        const {email, attemps, timestamp} = doc.data();
+        history.push({email, attemps, timestamp});
     });
     return history;
 }
