@@ -2,11 +2,13 @@ import * as Auth from './controller/firebase_auth.js';
 import * as About from './viewpage/about_page.js';
 import * as TicTacToe from './viewpage/tictactoe_page.js';
 import * as Baseball from './viewpage/baseball_page.js';
+import * as CardGame from './viewpage/cardgame_page.js';
 import { routing } from './controller/route.js';
 
 Auth.addEventListeners();
 About.addEventListeners();
 TicTacToe.addEventListeners();
+CardGame.addEventListeners();
 Baseball.addEventListeners();
 
 window.onload = () => {
