@@ -7,4 +7,8 @@ export class Card{
     setBet(n){
         this.bet = n;
     }
+
+    getBet(){
+        return this.bet;
+    }
 }
