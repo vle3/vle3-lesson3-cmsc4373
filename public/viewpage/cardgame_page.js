@@ -22,7 +22,7 @@ let totalBet = 0;
 let card0bets = 0;
 let card1bets = 0;
 let card2bets = 0;
-let totalDebt = 0 ;
+let totalDebt = 0;
 let winbet;
 
 const imageSource = {
@@ -211,7 +211,7 @@ function addGameEvents() {
         screen.card0betsubtract.disabled = false;
         screen.card1betsubtract.disabled = false;
         screen.card2betsubtract.disabled = false;
-        for(let i = 0 ; i < 3; i++){
+        for (let i = 0; i < 3; i++) {
             screen.images[i].src = imageSource.back;
         }
     });
@@ -262,13 +262,13 @@ function addGameEvents() {
         screen.card2betsubtract.disabled = true;
         screen.newGameButton.disabled = false;
         if (balance == 0) screen.newGameButton.disabled = true;
-        if(balance == 0 ) screen.statusMessage.innerHTML += '<br> no more coin, borrow to play';
+        if (balance == 0) screen.statusMessage.innerHTML += '<br> no more coin, borrow to play';
 
         let loan = false;
-        if(totalDebt > 0) loan = true;
+        if (totalDebt > 0) loan = true;
 
         const gameplay = {
-            email : currentUser.email,
+            email: currentUser.email,
             balance: balance,
             bets: gameModel.totalBet,
             loan: loan,
@@ -277,10 +277,10 @@ function addGameEvents() {
             won: gameModel.winbet,
         }
 
-        try{
+        try {
             await addCardGameHistory(gameplay);
-        }catch(e){
-            if(DEV) console.log('failed to save', e);
+        } catch (e) {
+            if (DEV) console.log('failed to save', e);
         }
     })
 }
@@ -309,29 +309,30 @@ function updateScreen() {
 
 async function historyButtonEvent() {
     let history;
-    
+
     try {
-        history= await getCardGameHistory(currentUser.email);
+        history = await getCardGameHistory(currentUser.email);
         console.log('History', history);
         let html = `
             <table class="table table-secondary table-striped">
                 <body>
         `;
-        for(let i = 0 ; i < 9; i++){
+        for (let i = 0; i < history.length; i++) {
             html += `
             <tr>
                 <td>
-                ${new Date(history[i].timestamp).toLocaleString()} 
+                ${new Date(history[i].timestamp).toLocaleString()}
                 <br>
                 Balance: ${history[i].balance} Debts: ${history[i].debts} Bet: ${history[i].bets} Won: ${history[i].won}
                 </td>
             </tr>
             `;
+            if (i >= 9) break;
         }
         html += '</body></table>';
         screen.gameplayHistory.innerHTML = html;
-    }catch(e){
-        if(DEV) console.log('ERROR, history button', e);
+    } catch (e) {
+        if (DEV) console.log('ERROR, history button', e);
         Util.info('Failed to get game history', JSON.stringify(e));
     }
 }
