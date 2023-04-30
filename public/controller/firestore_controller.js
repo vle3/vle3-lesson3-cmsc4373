@@ -1,6 +1,6 @@
 import {
-    getFirestore,
-    collection, addDoc,
+    getFirestore, doc,
+    collection, addDoc, updateDoc, deleteDoc,
     query, where, orderBy,
     getDocs
 } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"
@@ -12,9 +12,42 @@ const BaseballGameCollection = 'baseball_game';
 const CardGameCollection = 'card_game';
 const CommunityFeedCollection = 'community_feed';
 
-export async function addCommunityFeed(comment){
+export async function addCommunityFeed(comment) {
     //comment = {email, message, timestamp}
     await addDoc(collection(db, CommunityFeedCollection), comment);
+}
+
+export async function updateComment(commentId, updateMessage) {
+    let updateInfo;
+    updateInfo = {message: updateMessage , timestamp: Date.now() };
+    const docRef =  doc(db,CommunityFeedCollection, commentId);
+    try {
+        await updateDoc(docRef,updateInfo);
+    } catch (e) {
+    }
+}
+
+export async function removeComment(commentId){
+    const docRef = doc(db,CommunityFeedCollection, commentId);
+    try{
+        await deleteDoc(docRef);
+    }
+    catch(e){
+
+    }
+}
+
+export async function getCommunityFeedList() {
+    let list = [];
+    const q = query(collection(db, CommunityFeedCollection),
+        orderBy('timestamp', 'desc'),
+    );
+    const snapShot = await getDocs(q);
+    snapShot.forEach(doc => {
+        const { email, message, timestamp, } = doc.data();
+        list.push({ email, message, timestamp, docId: doc.id });
+    });
+    return list;
 }
 
 export async function addTicTacToeGameHistory(gameplay) {
@@ -72,7 +105,7 @@ export async function getCardGameHistory(email) {
     const snapShot = await getDocs(q);
     snapShot.forEach(doc => {
         const { email, balance, bets, loan, debts, timestamp, won } = doc.data();
-        history.push({email, balance, bets, loan, debts, timestamp, won});
+        history.push({ email, balance, bets, loan, debts, timestamp, won });
     });
     return history;
 }
