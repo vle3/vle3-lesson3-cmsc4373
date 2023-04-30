@@ -29,3 +29,7 @@ input{
 .number-button{
     padding-right: 8px 2px;
 }
+
+.text-comment{
+    width: 75%;
+}

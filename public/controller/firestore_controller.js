@@ -10,6 +10,12 @@ const db = getFirestore();
 const TicTacToeGameCollection = 'tictactoe_game';
 const BaseballGameCollection = 'baseball_game';
 const CardGameCollection = 'card_game';
+const CommunityFeedCollection = 'community_feed';
+
+export async function addCommunityFeed(comment){
+    //comment = {email, message, timestamp}
+    await addDoc(collection(db, CommunityFeedCollection), comment);
+}
 
 export async function addTicTacToeGameHistory(gameplay) {
     //gameplay = {email, winner, moves, timestamp}

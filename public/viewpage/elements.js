@@ -18,6 +18,7 @@ export const menus = {
     tictactoe: document.getElementById('menu-tictactoe'),
     baseball: document.getElementById('menu-baseball'),
     cardgame: document.getElementById('menu-cardgame'),
+    community: document.getElementById('menu-community'),
     about: document.getElementById('menu-about'),
     signOut: document.getElementById('menu-signout'),
 }
